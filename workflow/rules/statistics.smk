@@ -1,0 +1,1 @@
+# Mesure pi, fis, tajima's D, fst, pi0/pi4

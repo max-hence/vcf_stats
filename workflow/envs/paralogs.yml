@@ -1,0 +1,15 @@
+name: paralogs
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python>=3.11
+  - vcftools
+  - bcftools
+  - samtools
+  - matplotlib
+  - numpy
+  - pandas
+  - scipy
+  - statsmodels

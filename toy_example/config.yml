@@ -1,0 +1,15 @@
+      ###################
+      ### CONFIG FILE ###
+      ###################
+
+vcf_path: "/projects/plantlp/02_VCF_PROCESSING/scripts/vcf_stats/toy_example/zmays.test.vcf.gz"
+fai_path: "/projects/plantlp/02_VCF_PROCESSING/scripts/vcf_stats/toy_example/zmays_parviglumis_PRJNA641889.chr1x2.fai"
+bed_path: "/projects/plantlp/02_VCF_PROCESSING/scripts/vcf_stats/toy_example/zmays.callable_all_samples.bed"
+final_prefix: "test"
+paralogs: True
+chunks_count: 10
+minQ: 30
+minind: 1
+mincov: 1
+bams_list: "/projects/plantlp/02_VCF_PROCESSING/scripts/vcf_stats/toy_example/zmays.10.bams"
+ngsparalog_path: "/projects/plantlp/softwares/ngsParalog/ngsParalog" # make sure it's well compiled

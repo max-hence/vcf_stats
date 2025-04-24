@@ -1,0 +1,14 @@
+name: vcf_processing
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  - vcftools==0.1.16
+  - bcftools==1.18
+  - pip=24.0
+  - pip:
+  - numpy
+  - pandas
+  - matplotlib
