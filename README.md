@@ -1,6 +1,6 @@
 #### VCF Stats ####
 
-Pipeline to run first basic statistics on vcf. 
+Pipeline to run basic statistics on vcf. 
 
 Right now it executes the following functions:
 
