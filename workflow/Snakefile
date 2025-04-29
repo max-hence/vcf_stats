@@ -12,9 +12,7 @@ if config["paralogs"]:
 # Force chr name matching in paths
 wildcard_constraints:
     chr_id = "|".join(get_chr_list(config["fai_path"])),
-    prefix = config["final_prefix"],
-    sample = "|".join(get_sample_list(config["pop_path"]))
-
+    prefix = config["final_prefix"]
 
 rule all:
     input:

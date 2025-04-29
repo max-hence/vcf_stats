@@ -23,6 +23,7 @@ def get_output():
     final_prefix = config["final_prefix"]
     chromosomes: list = get_chr_list(config["fai_path"])
     out: list  = []
+    chunks = [i for i in range(int(config["chunks_count"]))]
 
     if final_prefix == "":
         raise (WorkflowError("'final_prefix' is not set in config."))
@@ -33,7 +34,6 @@ def get_output():
 
     # Paralogs
     if config["paralogs"]:
-        out.extend(expand("results/paralogs/{prefix}.{chr_id}.snps_list.bed", prefix=final_prefix, chr_id=chromosomes))
         out.extend(expand("results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed", prefix=final_prefix, chr_id=chromosomes))
     
     return out
@@ -43,5 +43,9 @@ def get_previews(preview_path:str):
     chromosomes = get_chr_list(config["fai_path"])
     return expand(preview_path, prefix=config["final_prefix"], chr_id=chromosomes)
 
-def get_chunk_files(wildcards):
-    return sorted(glob(f"results/paralogs/snps_list/{wildcards.prefix}.{wildcards.chr_id}.*.pval.tsv"))
+
+def get_chunk_files(wc):
+    return expand(
+        "results/paralogs/lr/{{prefix}}.{{chr_id}}.{chunk}.pval.tsv",
+        chunk=["%.2d" % i for i in range(int(config["chunks_count"]))]
+    )

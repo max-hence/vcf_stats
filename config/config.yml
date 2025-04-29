@@ -2,14 +2,14 @@
       ### CONFIG FILE ###
       ###################
 
-vcf_path: "/projects/plantlp/test/vcf/zmays.test.vcf.gz"
-fai_path: "/projects/plantlp/00_DATA/data/zmays_parviglumis/zmays_parviglumis_PRJNA641889.chr1x2.fai"
-bed_path: "/projects/plantlp/test/zmays.callable_all_samples.bed"
-final_prefix: "test"
+vcf_path: ""
+fai_path: ""
+bed_path: ""
+final_prefix: ""
 paralogs: True
-chunks_count: 10
+chunks_count: 10 # Number of chunks you chromosomes will be splitted, saves time. Depends on the nbr of jobs that could run simultaneously
 minQ: 30
 minind: 1
 mincov: 1
-bams_list: "/projects/plantlp/test/zmays.10.bams"
-ngsparalog_path: "/projects/plantlp/softwares/ngsParalog/ngsParalog" # make sure it's well compiled
+bams_list: "" # generated with something like `for file in $(ls <bam_dir>/*); do echo $file >> bam_list.txt; done`
+ngsparalog_path: "/projects/plantlp/softwares/ngsParalog/ngsParalog" # path to ngsParalog main directory. Make sure it's well compiled

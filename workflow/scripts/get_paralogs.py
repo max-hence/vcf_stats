@@ -79,8 +79,5 @@ if __name__ == "__main__":
     elif args.plot:
         manhattan_plot(args.input, args.output)
 
-    elif args.save:
-        save_paralogs(args.input, args.output)
-
     else:
         raise ValueError("Choose btw --plot, --save et --pval")

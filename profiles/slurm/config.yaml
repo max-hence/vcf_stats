@@ -6,17 +6,17 @@ retries: 0 # Retry jobs N times.
 
 # These resources will be applied to all rules. Can be overriden on a per-rule basis below.
 default-resources:
-  mem_mb: attempt * 2000
+  mem_mb: attempt * 1000
   slurm_partition: "genouest,ecobio"
   slurm_account: "mbrault"
-  runtime: 120 # (In minutes)
-  cpus_per_task: 2
+  runtime: 60 # (In minutes)
+  cpus_per_task: 1
 
 # Per-rule resources
 set-resources:
-  get_paralogs:
-    mem_mb: attempt * 10000
+  ngs_paralog:
+    mem_mb: attempt * 2000
     slurm_partition: "genouest,ecobio"
     slurm_account: "mbrault"
     runtime: 720 # (In minutes)
-    cpus_per_task: 1
+    cpus_per_task: 2

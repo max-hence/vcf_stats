@@ -9,7 +9,7 @@ rule split_by_chr:
     output:
         splitted_vcf = temp("results/raw/vcf/{prefix}.raw.{chr_id}.vcf.gz"),
         splitted_vcf_idx = temp("results/raw/vcf/{prefix}.raw.{chr_id}.vcf.gz.tbi"),
-        stats = "results/raw/stats/{prefix}.raw.{chr_id}.stats"
+        stats = "results/raw/stats/{prefix}.raw.{chr_id}.fai"
     conda:
         "../envs/vcf_processing.yml"
     log:
