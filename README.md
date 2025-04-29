@@ -9,6 +9,7 @@ Right now it executes the following functions:
 
 
 To do :
+
     - Corrects genotypes based on callability by sample
     - Subsample vcf based on a given list of samples
     - Generates SFS
@@ -17,8 +18,9 @@ To do :
 
 
 The minimum you need is a :
+
     - raw vcf, zipped and indexed
     - fai-like file giving the id and size of chr
-    - file with list of samples to analyze (important when pipeline will be able to subsample the pop)
+    - file with list of samples to analyze (see format in toy_example/)
     - bed file summarizing callability (snpArcher output)
     - ngsparalogs locally installed and compiled
