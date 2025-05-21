@@ -60,3 +60,24 @@ rule filter_snps:
         tabix -p vcf {output.vcf_snps_gz}
         bcftools index -s {output.vcf_snps_gz} > {output.snps_stats}
         """
+
+#TODO: Un truc comme ça, j'ai récup d'un de mes autres snakemake donc surment des erreurs sur les paths et tout
+rule correct_genotype:
+    """
+        Changes wrongly called genotype into NA
+    """
+    input:
+        vcf = "results/snps/vcf/{prefix}.SNPS.{chr}.vcf",
+        splitted_bed = "results/raw/bed/{prefix}.raw.{chr}.callable.bed",
+        script = workflow.source_path("../scripts/correct_genotype.py")
+    output:
+        corrected_vcf = temp("results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf"),
+        corrected_vcf_gz = "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz",
+        corrected_vcf_idx = "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz.tbi"
+    conda:
+        "../envs/vcf_processing.yml"
+    shell:
+        """
+        python3 {input.script} -i {input.vcf} -b {input.splitted_bed} -o {output.corrected_vcf}
+        bgzip < {output.corrected_vcf} > {output.corrected_vcf_gz} && tabix -p vcf {output.corrected_vcf_gz}
+        """

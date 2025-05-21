@@ -36,6 +36,12 @@ def get_output():
     if config["paralogs"]:
         out.extend(expand("results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed", prefix=final_prefix, chr_id=chromosomes))
     
+    # vcf filtered on missing genotype and paralogs
+
+    # pi
+
+    # sfs
+    
     return out
 
 

@@ -107,3 +107,20 @@ rule get_paralogs:
         """
         cat {input.pval}| awk '$8 == "True" {{print $1 "\t" $2-1 "\t" $2}}' > {output.bed}
         """
+
+
+
+rule filter_vcf:
+    """ Filtre le vcf en elenvant les paralogs """
+    input: 
+        vcf= "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz"
+        paralogs = "results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed"
+
+    output: 
+        vcf="results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz"
+
+    conda:
+        "../vcf_processing.yml"
+
+    shell:
+        # see /projects/plantlp/utils/scripts/trim_vcf.sh
