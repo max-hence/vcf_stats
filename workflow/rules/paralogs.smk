@@ -113,14 +113,16 @@ rule get_paralogs:
 rule filter_vcf:
     """ Filtre le vcf en elenvant les paralogs """
     input: 
-        vcf= "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz"
+        vcf= "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz",
         paralogs = "results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed"
-
     output: 
-        vcf="results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz"
-
+        vcf = temp("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf"),
+        vcf_gz = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
+        vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi"
     conda:
         "../vcf_processing.yml"
-
     shell:
-        # see /projects/plantlp/utils/scripts/trim_vcf.sh
+        """
+        bcftools view -T ^{input.paralogs} {input.vcf} -o {output.vcf}
+        bgzip < {output.vcf} > {output.vcf_gz} && tabix -p vcf {output.vcf_gz}
+        """

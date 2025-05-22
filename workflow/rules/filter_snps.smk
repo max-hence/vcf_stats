@@ -61,19 +61,18 @@ rule filter_snps:
         bcftools index -s {output.vcf_snps_gz} > {output.snps_stats}
         """
 
-#TODO: Un truc comme ça, j'ai récup d'un de mes autres snakemake donc surment des erreurs sur les paths et tout
 rule correct_genotype:
     """
-        Changes wrongly called genotype into NA
+        Set wrongly called genotype into NA
     """
     input:
-        vcf = "results/snps/vcf/{prefix}.SNPS.{chr}.vcf",
-        splitted_bed = "results/raw/bed/{prefix}.raw.{chr}.callable.bed",
+        vcf = "results/snps/vcf/{prefix}.SNPS.{chr_id}.vcf",
+        splitted_bed = "results/raw/bed/{prefix}.raw.{chr_id}.callable.bed",
         script = workflow.source_path("../scripts/correct_genotype.py")
     output:
-        corrected_vcf = temp("results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf"),
-        corrected_vcf_gz = "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz",
-        corrected_vcf_idx = "results/callability/vcf/{prefix}.SNPS.NA.{chr}.vcf.gz.tbi"
+        corrected_vcf = temp("results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf"),
+        corrected_vcf_gz = "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz",
+        corrected_vcf_idx = "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz.tbi"
     conda:
         "../envs/vcf_processing.yml"
     shell:
