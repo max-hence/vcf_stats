@@ -3,8 +3,17 @@
     # see /projects/plantlp/02_VCF_PROCESSING/scripts/get_pi.sh for pi measures
 rule pi:
     """ pi by sites """
-    input: 
-        vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz"
+    input:
+        vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
+        vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi",
+    output:
+        sites_pi = "results/stats/{prefix}.{chr}.sites.pi"
+    conda:
+        "../envs/vcf_processing.yml"
+    shell:
+        """
+        vcftools --gzvcf {input.vcf} --site-pi --out "results/stats/{wildcards.prefix}.{wildcards.chr}"
+        """
 
 rule pi_by_window:
     """ pi by 100kb windows """
