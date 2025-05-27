@@ -25,9 +25,9 @@ rule split_snps_list:
     input:
         snps_list = "results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.bed",
     output:
-        chunk = expand("results/paralogs/snps_list/{{prefix}}.{{chr_id}}.snps_list.{chunk}.bed",
+        chunk = temp(expand("results/paralogs/snps_list/{{prefix}}.{{chr_id}}.snps_list.{chunk}.bed",
             chunk=["%.2d" % i for i in range(int(config["chunks_count"]))]
-            )
+            ))
     params:
         chunk = config["chunks_count"]
     shell:
@@ -44,7 +44,7 @@ rule ngs_paralog:
     """
     input:
         bam_list = config["bams_list"],
-        chunk = "results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.{chunk}.bed",
+        chunk = temp("results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.{chunk}.bed"),
         ngsparalogs_path = config["ngsparalog_path"]
     output:
         paralogs_lr = "results/paralogs/lr/{prefix}.{chr_id}.{chunk}.lr"
@@ -74,7 +74,7 @@ rule chi2:
         paralogs_lr = "results/paralogs/lr/{prefix}.{chr_id}.{chunk}.lr",
         script = workflow.source_path("../scripts/get_paralogs.py")
     output:
-        paralogs_pval = "results/paralogs/lr/{prefix}.{chr_id}.{chunk}.pval.tsv"
+        paralogs_pval = temp("results/paralogs/lr/{prefix}.{chr_id}.{chunk}.pval.tsv")
     conda:
         "../envs/paralogs.yml"
     shell:
@@ -84,6 +84,7 @@ rule chi2:
 
 rule merge_chunks:
     """
+    Merge results
     """
     input:
         chunks = get_chunk_files
