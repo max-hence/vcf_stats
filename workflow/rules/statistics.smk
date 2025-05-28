@@ -7,7 +7,7 @@ rule pi:
         vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
         vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi",
     output:
-        sites_pi = "results/stats/{prefix}.{chr}.sites.pi"
+        sites_pi = "results/stats/pi/{prefix}.{chr}.sites.pi"
     conda:
         "../envs/vcf_processing.yml"
     shell:
@@ -17,17 +17,22 @@ rule pi:
 
 rule pi_by_window:
     """ pi by 100kb windows """
+    input:
+        sites_pi = "results/stats/pi/{prefix}.{chr}.sites.pi",
+        script = workflow.source_path("../scripts/pi_by_window.py")
+    output:
+        wdw_pi = "results/stats/pi/{prefix}.{chr}.wdw.pi"
+    conda:
+        "../envs/vcf_processing.yml"
+    shell:
+        """
+        python3 {input.script} \
+            -i {input.sites_pi} \
+            -w 100000 \
+            -o {output.wdw_pi}
+        """
 
-rule mean_pi:
-    """ mean pi by chromosomes """
-
-rule sfs_preview:
-    """ /projects/plantlp/02_VCF_PROCESSING/scripts/easySFS.sh """
-rule sfs:
-    """ sfs by chromosomes """
-    # see /projects/plantlp/02_VCF_PROCESSING/scripts/get_sfs.sh
-
-rule thetaW:
+rule :
     """ Number of segregating sites """
 
     # n_snp/sum([1/i for i in range(1, n_indiv)])
@@ -50,3 +55,11 @@ rule Dtajima:
     # Il faut d'abord récupérer pi et S... Listes avec les mêmes dimensions :
     # si par window :  chr_id   start   end pi & chr_id   start   end S
     # si par chr : chr_id   pi  & chr_id    S
+
+
+rule sfs_preview:
+    """ /projects/plantlp/02_VCF_PROCESSING/scripts/easySFS.sh """
+
+rule sfs:
+    """ sfs by chromosomes """
+    # see /projects/plantlp/02_VCF_PROCESSING/scripts/get_sfs.sh
