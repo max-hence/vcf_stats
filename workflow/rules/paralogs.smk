@@ -47,7 +47,7 @@ rule ngs_paralog:
         chunk = temp("results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.{chunk}.bed"),
         ngsparalogs_path = config["ngsparalog_path"]
     output:
-        paralogs_lr = "results/paralogs/lr/{prefix}.{chr_id}.{chunk}.lr"
+        paralogs_lr = temp("results/paralogs/lr/{prefix}.{chr_id}.{chunk}.lr")
     conda:
         "../envs/paralogs.yml"
     log:
