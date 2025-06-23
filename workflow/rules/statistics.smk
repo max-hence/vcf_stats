@@ -7,7 +7,7 @@ rule pi:
         vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
         vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi",
     output:
-        sites_pi = "results/stats/{prefix}.{chr}.sites.pi"
+        sites_pi = "results/stats/{prefix}.{chr_id}.sites.pi"
     conda:
         "../envs/vcf_processing.yml"
     shell:
