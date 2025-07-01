@@ -108,8 +108,6 @@ rule get_paralogs:
         cat {input.pval}| awk '$8 == "True" {{print $1 "\t" $2-1 "\t" $2}}' > {output.bed}
         """
 
-
-
 rule filter_vcf:
     """ Filtre le vcf en elenvant les paralogs """
     input: 
