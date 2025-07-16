@@ -12,16 +12,16 @@ rule pi:
         "../envs/vcf_processing.yml"
     shell:
         """
-        vcftools --gzvcf {input.vcf} --site-pi --out "results/stats/{wildcards.prefix}.{wildcards.chr}"
+        vcftools --gzvcf {input.vcf} --site-pi --out "results/stats/{wildcards.prefix}.{wildcards.chr_id}"
         """
 
 rule pi_by_window:
     """ pi by 100kb windows """
     input:
-        sites_pi = "results/stats/pi/{prefix}.{chr}.sites.pi",
+        sites_pi = "results/stats/pi/{prefix}.{chr_id}.sites.pi",
         script = workflow.source_path("../scripts/pi_by_window.py")
     output:
-        wdw_pi = "results/stats/pi/{prefix}.{chr}.wdw.pi"
+        wdw_pi = "results/stats/pi/{prefix}.{chr_id}.wdw.pi"
     conda:
         "../envs/vcf_processing.yml"
     shell:
