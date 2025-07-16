@@ -44,7 +44,7 @@ rule ngs_paralog:
     """
     input:
         bam_list = config["bams_list"],
-        chunk = temp("results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.{chunk}.bed"),
+        chunk = "results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.{chunk}.bed",
         ngsparalogs_path = config["ngsparalog_path"]
     output:
         paralogs_lr = temp("results/paralogs/lr/{prefix}.{chr_id}.{chunk}.lr")
