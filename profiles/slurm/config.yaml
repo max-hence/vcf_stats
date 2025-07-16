@@ -20,3 +20,10 @@ set-resources:
     slurm_account: "mbrault"
     runtime: 720 # (In minutes)
     cpus_per_task: 2
+
+  correct_genotype:
+    mem_mb: attempt * 5000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 720 # (In minutes)
+    cpus_per_task: 2
