@@ -39,7 +39,7 @@ def get_output():
     # vcf filtered on missing genotype and paralogs
 
     # pi
-
+    out.extend(expand("results/stats/{prefix}.{chr_id}.sites.pi", prefix=final_prefix,chr_id=chromosomes))
     # sfs
     
     return out
