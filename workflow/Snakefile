@@ -9,6 +9,8 @@ include: "rules/filter_snps.smk"
 if config["paralogs"]:
     include: "rules/paralogs.smk"
 
+include: "rules/statistics.smk"
+
 # Force chr name matching in paths
 wildcard_constraints:
     chr_id = "|".join(get_chr_list(config["fai_path"])),

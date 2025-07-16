@@ -118,7 +118,7 @@ rule filter_vcf:
         vcf_gz = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
         vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi"
     conda:
-        "../vcf_processing.yml"
+        "../envs/vcf_processing.yml"
     shell:
         """
         bcftools view -T ^{input.paralogs} {input.vcf} -o {output.vcf}
