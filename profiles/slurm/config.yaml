@@ -1,29 +1,29 @@
 executor: slurm
 use-conda: True
-jobs: 10 # Have up to N jobs submitted at any given time
+jobs: 50 # Have up to N jobs submitted at any given time
 latency-wait: 100 # Wait N seconds for output files due to latency
 retries: 0 # Retry jobs N times.
 
 # These resources will be applied to all rules. Can be overriden on a per-rule basis below.
 default-resources:
   mem_mb: attempt * 1000
-  slurm_partition: "genouest,ecobio"
-  slurm_account: "mbrault"
+  slurm_partition: "fast"
+  slurm_account: "plant_lewontin_paradox"
   runtime: 60 # (In minutes)
   cpus_per_task: 1
 
 # Per-rule resources
 set-resources:
   ngs_paralog:
-    mem_mb: attempt * 2000
-    slurm_partition: "genouest,ecobio"
-    slurm_account: "mbrault"
-    runtime: 720 # (In minutes)
+    mem_mb: attempt * 4000
+    slurm_partition: "fast"
+    slurm_account: "plant_lewontin_paradox"
+    runtime: 1400 # (In minutes)
     cpus_per_task: 2
-
-  correct_genotype:
-    mem_mb: attempt * 5000
-    slurm_partition: "genouest,ecobio"
-    slurm_account: "mbrault"
-    runtime: 720 # (In minutes)
-    cpus_per_task: 2
+  
+  get_stats:
+    mem_mb: attempt * 4000
+    slurm_partition: "fast"
+    slurm_account: "plant_lewontin_paradox"
+    runtime: 60 # (In minutes)
+    cpus_per_task: 4

@@ -1,0 +1,12 @@
+name: pixy
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python
+  - matplotlib
+  - numpy
+  - pandas
+  - pixy
+  - htslib

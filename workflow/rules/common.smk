@@ -32,14 +32,15 @@ def get_output():
     out.extend(expand("results/snps/vcf/{prefix}.SNPS.{chr_id}.vcf.gz", prefix=final_prefix, chr_id=chromosomes))
     out.extend(expand("results/snps/vcf/{prefix}.SNPS.{chr_id}.vcf.gz.tbi", prefix=final_prefix, chr_id=chromosomes))
 
-    # Paralogs
-    if config["paralogs"]:
-        out.extend(expand("results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed", prefix=final_prefix, chr_id=chromosomes))
-    
     # vcf filtered on missing genotype and paralogs
+    out.extend(expand("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz", prefix=final_prefix, chr_id=chromosomes))
+    out.extend(expand("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi", prefix=final_prefix, chr_id=chromosomes))
+    
+    # stats
+    out.extend(expand("results/stats/{prefix}.{chr_id}_pi.txt", prefix=final_prefix, chr_id=chromosomes))
+    out.extend(expand("results/stats/{prefix}.{chr_id}_watterson_theta.txt", prefix=final_prefix, chr_id=chromosomes))
+    out.extend(expand("results/stats/{prefix}.{chr_id}_tajima_d.txt", prefix=final_prefix, chr_id=chromosomes))
 
-    # pi
-    out.extend(expand("results/stats/{prefix}.{chr_id}.sites.pi", prefix=final_prefix,chr_id=chromosomes))
     # sfs
     
     return out

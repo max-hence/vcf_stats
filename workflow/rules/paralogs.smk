@@ -94,7 +94,6 @@ rule merge_chunks:
         cat {input.chunks} > {output.merged_lr}
         """
 
-
 rule get_paralogs:
     """
     Mark sites below 0.05 as sites belonging to a paralogous region
@@ -107,6 +106,7 @@ rule get_paralogs:
         """
         cat {input.pval}| awk '$8 == "True" {{print $1 "\t" $2-1 "\t" $2}}' > {output.bed}
         """
+
 
 rule filter_vcf:
     """ Filtre le vcf en elenvant les paralogs """
