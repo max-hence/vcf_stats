@@ -106,21 +106,3 @@ rule get_paralogs:
         """
         cat {input.pval}| awk '$8 == "True" {{print $1 "\t" $2-1 "\t" $2}}' > {output.bed}
         """
-
-
-rule filter_vcf:
-    """ Filtre le vcf en elenvant les paralogs """
-    input: 
-        vcf= "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz",
-        paralogs = "results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed"
-    output: 
-        vcf = temp("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf"),
-        vcf_gz = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
-        vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi"
-    conda:
-        "../envs/vcf_processing.yml"
-    shell:
-        """
-        bcftools view -T ^{input.paralogs} {input.vcf} -o {output.vcf}
-        bgzip < {output.vcf} > {output.vcf_gz} && tabix -p vcf {output.vcf_gz}
-        """

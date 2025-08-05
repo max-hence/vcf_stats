@@ -1,5 +1,22 @@
 # Mesure pi, thetaW, tajima's D, pi0/pi4
 
+rule filter_vcf:
+    """ Filtre le vcf en enlevant les paralogs """
+    input: 
+        vcf= "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz",
+        paralogs = "results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed"
+    output: 
+        vcf = temp("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf"),
+        vcf_gz = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
+        vcf_idx = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi"
+    conda:
+        "../envs/vcf_processing.yml"
+    shell:
+        """
+        bcftools view -T ^{input.paralogs} {input.vcf} -o {output.vcf}
+        bgzip < {output.vcf} > {output.vcf_gz} && tabix -p vcf {output.vcf_gz}
+        """
+
 rule get_stats:
     """ pi, thetaW and tajimaD by 100kb windows """
     input:
@@ -24,16 +41,3 @@ rule get_stats:
             --bypass_invariant_check \
             --n_cores 4
         """
-
-rule fis:
-    input:
-        vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf",
-        pop_path = config["pop_path"]
-    output:
-        
-rule sfs_preview:
-    """ /projects/plantlp/02_pixy/scripts/easySFS.sh """
-
-rule sfs:
-    """ sfs by chromosomes """
-    # see /projects/plantlp/02_pixy/scripts/get_sfs.sh

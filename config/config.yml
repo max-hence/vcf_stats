@@ -6,7 +6,6 @@ vcf_path: ""
 fai_path: ""
 bed_path: ""
 final_prefix: ""
-paralogs: True
 chunks_count: 10 # Number of chunks you chromosomes will be splitted, saves time. Depends on the nbr of jobs that could run simultaneously
 minQ: 30
 minind: 1
