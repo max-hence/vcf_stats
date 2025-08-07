@@ -25,7 +25,7 @@ rule split_bed:
     input:
         bed = config["bed_path"]
     output:
-        splitted_bed = temp("results/raw/bed/{prefix}.raw.{chr_id}.callable.bed")
+        splitted_bed = "results/raw/bed/{prefix}.{chr_id}.callable.bed"
     log:
         "logs/{prefix}.{chr_id}.log"
     shell:
@@ -67,7 +67,7 @@ rule correct_genotype:
     """
     input:
         vcf = "results/snps/vcf/{prefix}.SNPS.{chr_id}.vcf",
-        splitted_bed = "results/raw/bed/{prefix}.raw.{chr_id}.callable.bed",
+        splitted_bed = "results/raw/bed/{prefix}.{chr_id}.callable.bed",
         script = workflow.source_path("../scripts/correct_genotype.py")
     output:
         corrected_vcf = temp("results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf"),
