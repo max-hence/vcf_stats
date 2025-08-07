@@ -35,3 +35,9 @@ set-resources:
     runtime: 60 # (In minutes)
     cpus_per_task: 4
 
+  correct_genotype:
+    mem_mb: attempt * 8000
+    slurm_partition: "fast"
+    slurm_account: "plant_lewontin_paradox"
+    runtime: 360 # (In minutes)
+    cpus_per_task: 2
