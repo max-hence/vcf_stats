@@ -2,7 +2,7 @@ executor: slurm
 use-conda: True
 jobs: 50 # Have up to N jobs submitted at any given time
 latency-wait: 100 # Wait N seconds for output files due to latency
-retries: 2 # Retry jobs N times.
+retries: 1 # Retry jobs N times.
 
 # These resources will be applied to all rules. Can be overriden on a per-rule basis below.
 default-resources:
@@ -21,23 +21,17 @@ set-resources:
     runtime: 1400 # (In minutes)
     cpus_per_task: 2
 
-  split_bed:
-    mem_mb: attempt * 20000
+  correct_genotype:
+    mem_mb: attempt * 4000
     slurm_partition: "fast"
     slurm_account: "plant_lewontin_paradox"
-    runtime: 1400 # (In minutes)
+    runtime: 600 # (In minutes)
     cpus_per_task: 1
 
   get_stats:
     mem_mb: attempt * 4000
     slurm_partition: "fast"
     slurm_account: "plant_lewontin_paradox"
-    runtime: 60 # (In minutes)
+    runtime: 240 # (In minutes)
     cpus_per_task: 4
 
-  correct_genotype:
-    mem_mb: attempt * 8000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 360 # (In minutes)
-    cpus_per_task: 2

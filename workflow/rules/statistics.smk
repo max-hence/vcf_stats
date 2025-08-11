@@ -41,3 +41,22 @@ rule get_stats:
             --bypass_invariant_check \
             --n_cores 4
         """
+
+rule fis:
+    """ fis by window """
+    input:
+        vcf_gz = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz",
+        vcf = "results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf",
+        script = workflow.source_path("../scripts/fis_by_window.py")
+    output:
+        fis = "results/stats/{prefix}.{chr_id}.fis.tsv"
+    conda:
+        "../envs/vcf_processing.yml"
+    shell:
+        """
+        python3 {input.script} \
+            -i {input.vcf} \
+            -s $(seq -s, 1 $(bcftools query -l {input.vcf_gz} | wc -l )) \
+            -m 2 \
+            -o {output.fis}
+        """
