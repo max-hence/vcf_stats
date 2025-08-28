@@ -70,9 +70,9 @@ rule correct_genotype:
         splitted_bed = "results/raw/bed/{prefix}.{chr_id}.callable.bed",
         script = workflow.source_path("../scripts/correct_genotype.py")
     output:
-        corrected_vcf = temp("results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf"),
-        corrected_vcf_gz = "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz",
-        corrected_vcf_idx = "results/callability/vcf/{prefix}.SNPS.NA.{chr_id}.vcf.gz.tbi"
+        corrected_vcf = temp("results/callability/vcf/{prefix}.callability.{chr_id}.vcf"),
+        corrected_vcf_gz = "results/callability/vcf/{prefix}.callability.{chr_id}.vcf.gz",
+        corrected_vcf_idx = "results/callability/vcf/{prefix}.callability.{chr_id}.vcf.gz.tbi"
     conda:
         "../envs/vcf_processing.yml"
     shell:

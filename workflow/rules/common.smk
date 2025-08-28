@@ -44,6 +44,7 @@ def get_output():
     out.extend(expand("results/stats/{prefix}.{chr_id}.fis.tsv", prefix=final_prefix, chr_id=chromosomes))
     
     # sfs
+    out.extend(expand("results/sfs/{prefix}.{chr_id}.sfs", prefix=final_prefix, chr_id=chromosomes))
     
     return out
 

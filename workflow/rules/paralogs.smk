@@ -59,7 +59,7 @@ rule ngs_paralog:
     shell:
         """
         samtools mpileup -b {input.bam_list} -l {input.chunk} -q 0 -Q 0--ff UNMAP,DUP -d 0 | \
-	        {input.ngsparalogs_path} calcLR -infile - \
+            {input.ngsparalogs_path} calcLR -infile - \
                 -outfile {output.paralogs_lr} \
                 -minQ {params.minQ} \
                 -minind {params.minind} \
@@ -106,3 +106,4 @@ rule get_paralogs:
         """
         cat {input.pval}| awk '$8 == "True" {{print $1 "\t" $2-1 "\t" $2}}' > {output.bed}
         """
+

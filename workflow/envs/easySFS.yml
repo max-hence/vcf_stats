@@ -1,0 +1,12 @@
+name: easySFS
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python==3.11.4
+  - pip=24.0
+  - pip:
+    - numpy
+    - scipy
+    - pandas
