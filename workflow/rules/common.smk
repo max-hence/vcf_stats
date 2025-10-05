@@ -1,13 +1,8 @@
 from glob import glob
 
-def check_fai_format(fai_path:str):
-    with open(fai_path, "r") as fai:
-        if len(fai_path.readline().split("\t")) != 2:
-            raise (WorkflowError(" fai must contain only two tab-separated columns : chr_id\tchr_length"))
-
 
 def get_chr_list(fai_path:str):
-    """Return the list of scf that will analyzed
+    """Return the list of scf that will be analyzed
 
     Args:
         fai_path (str): tab separated table (fai format). 
@@ -15,9 +10,12 @@ def get_chr_list(fai_path:str):
     Returns:
         list of scaffolds of interest
     """
+    with open(fai_path, "r") as fai:
+        if len(fai.readline().split("\t")) != 2:
+            raise (WorkflowError(" fai must contain only two tab-separated columns : chr_id\tchr_length"))
 
-    return [row.split('\t')[0] for row in open(fai_path, "r")]
-
+    with open(fai_path, "r") as fai:
+        return [row.split('\t')[0] for row in fai]
 
 def get_output():
     final_prefix = config["final_prefix"]
@@ -34,18 +32,18 @@ def get_output():
 
     # vcf filtered on missing genotype and paralogs
     if config["paralogs"]:
-        out.extend(expand("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz", prefix=final_prefix, chr_id=chromosomes))
-        out.extend(expand("results/paralogs/vcf/{prefix}.SNPS.NA.no_paralogs.{chr_id}.vcf.gz.tbi", prefix=final_prefix, chr_id=chromosomes))
+        out.extend(expand("results/paralogs/bed/{prefix}.{chr_id}.paralogs.bed", prefix=final_prefix, chr_id=chromosomes))
 
     # stats
-    out.extend(expand("results/stats/{prefix}.{chr_id}_pi.txt", prefix=final_prefix, chr_id=chromosomes))
-    out.extend(expand("results/stats/{prefix}.{chr_id}_watterson_theta.txt", prefix=final_prefix, chr_id=chromosomes))
-    out.extend(expand("results/stats/{prefix}.{chr_id}_tajima_d.txt", prefix=final_prefix, chr_id=chromosomes))
-    out.extend(expand("results/stats/{prefix}.{chr_id}.fis.tsv", prefix=final_prefix, chr_id=chromosomes))
-    
-    # sfs
-    out.extend(expand("results/sfs/{prefix}.{chr_id}.sfs", prefix=final_prefix, chr_id=chromosomes))
-    
+    if config["statistics"]:
+        out.extend(expand("results/stats/{prefix}.{chr_id}_pi.txt", prefix=final_prefix, chr_id=chromosomes))
+        out.extend(expand("results/stats/{prefix}.{chr_id}_watterson_theta.txt", prefix=final_prefix, chr_id=chromosomes))
+        out.extend(expand("results/stats/{prefix}.{chr_id}_tajima_d.txt", prefix=final_prefix, chr_id=chromosomes))
+        out.extend(expand("results/stats/{prefix}.{chr_id}.fis.tsv", prefix=final_prefix, chr_id=chromosomes))
+
+        # sfs
+        out.extend(expand("results/sfs/{prefix}.{chr_id}.sfs", prefix=final_prefix, chr_id=chromosomes))
+
     return out
 
 

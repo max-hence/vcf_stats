@@ -3,7 +3,7 @@
 #SBATCH -o /projects/plantlp/02_VCF_PROCESSING/genouest_log/vcf_stats/%x.%j.out
 #SBATCH -e /projects/plantlp/02_VCF_PROCESSING/genouest_log/vcf_stats/%x.%j.err
 #SBATCH -p ecobio,genouest
-#SBATCH --time=1-00
+#SBATCH --time=4-00
 #SBATCH --mem=4G
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2

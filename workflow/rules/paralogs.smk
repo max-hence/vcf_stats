@@ -2,11 +2,14 @@
 include:  "common.smk"
 
 wildcard_constraints:
-    chunk = "|".join(["%.2d" % i for i in range(int(config["chunks_count"]))])
+    chunk = "|".join(["%0*d" % (len(str(int(config["chunks_count"])-1)), i) for i in range(int(config["chunks_count"]))])
+
+print("|".join(["%0*d" % (len(str(int(config["chunks_count"])-1)), i) for i in range(int(config["chunks_count"]))]))
 
 rule get_snps_list:
     """
     List of all snp positions
+    VCF is in 1-based compared to BED format 0-based ! that's why '{print $1 \t $2-1}'
     """
     input:
         vcf = "results/snps/vcf/{prefix}.SNPS.{chr_id}.vcf.gz",
@@ -18,24 +21,29 @@ rule get_snps_list:
     shell:
         """
         bcftools view --no-header -r {wildcards.chr_id} {input.vcf} | \
-            awk -F '\t' '{{print $1 "\t" $2}}' > {output.snps_list}
+            awk -F '\t' '{{print $1 "\t" $2-1 "\t"}}' > {output.snps_list}
         """
 
 rule split_snps_list:
     input:
         snps_list = "results/paralogs/snps_list/{prefix}.{chr_id}.snps_list.bed",
     output:
-        chunk = expand("results/paralogs/snps_list/{{prefix}}.{{chr_id}}.snps_list.{chunk}.bed",
-            chunk=["%.2d" % i for i in range(int(config["chunks_count"]))]
-            )
+        chunk = expand(
+            "results/paralogs/snps_list/{{prefix}}.{{chr_id}}.snps_list.{chunk}.bed",
+            chunk=["%0*d" % (len(str(int(config["chunks_count"])-1)), i) for i in range(int(config["chunks_count"]))]
+        )
     params:
-        chunk = config["chunks_count"]
+        chunk = config["chunks_count"],
+        suffix_len = len(str(int(config["chunks_count"])-1))
     shell:
         """
         total_rows=$(wc -l < {input.snps_list})
 
-        split -l $(( (total_rows + {params.chunk} - 1) / {params.chunk} )) -d --additional-suffix ".bed" \
-            {input.snps_list} "results/paralogs/snps_list/{wildcards.prefix}.{wildcards.chr_id}.snps_list."
+        split -l $(( (total_rows + {params.chunk} - 1) / {params.chunk} )) \
+        --numeric-suffixes=0 --suffix-length={params.suffix_len} \
+        --additional-suffix ".bed" \
+        {input.snps_list} \
+        "results/paralogs/snps_list/{wildcards.prefix}.{wildcards.chr_id}.snps_list."
         """
 
 rule ngs_paralog:

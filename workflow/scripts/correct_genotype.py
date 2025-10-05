@@ -38,45 +38,50 @@ def correct_genotype(vcf_path:str, bed_path:str, correct_vcf_path:str):
     new_idx = True
     bed_exceeded = False # True if SNPs is outside bed file (I don't get why it happens sometimes...)
 
-    with open(correct_vcf_path, "w") as new_vcf:
-        with open(vcf_path, "r") as vcf:
-            for row in vcf:
-                if row.startswith("##"): new_vcf.write(row); continue # skip comments
-                if row.startswith("#CHROM"): # get sample ids
-                    all_samples = row.strip().split("\t")[9:]
-                    new_vcf.write(row)
-                    continue
+    # try encoding of vcf if weird characters
+    for enc in ["utf-8", "latin-1"]:
+        try:
+            with open(vcf_path, "r", encoding=enc) as vcf, open(correct_vcf_path, "w", encoding=enc) as new_vcf:
+                for row in vcf:
+                    if row.startswith("##"): new_vcf.write(row); continue # skip comments
+                    if row.startswith("#CHROM"): # get sample ids
+                        all_samples = row.strip().split("\t")[9:]
+                        new_vcf.write(row)
+                        continue
 
-                pos = row.strip().split('\t')[1] #locus
-                if not bed_exceeded:
-                    # find the good interval on the bed file associated with snp position
-                    # I do that instead of searching for the intervall for each SNP to gain time
-                    while int(pos) >= int(bed_table.iloc[interval_idx]["chromEnd"]):
-                        interval_idx += 1
-                        new_idx = True
-                        if interval_idx == total_intervals: 
-                            bed_exceeded = True
-                            break
+                    pos = row.strip().split('\t')[1] #locus
+                    if not bed_exceeded:
+                        # find the good interval on the bed file associated with snp position
+                        # I do that instead of searching for the intervall for each SNP to gain time
+                        while int(pos) >= int(bed_table.iloc[interval_idx]["chromEnd"]):
+                            interval_idx += 1
+                            new_idx = True
+                            if interval_idx == total_intervals: 
+                                bed_exceeded = True
+                                break
 
-                # Just to see the progress
-                if interval_idx%10000 == 0 and new_idx and interval_idx != 0:
-                    print(f"{interval_idx} rows", flush=True)
-                    new_idx = False
-                
-                if not bed_exceeded:
-                # Mark all genotype as NA if SNP outside bed file
-                    missing_samples = find_missing_samples(bed_table.iloc[interval_idx], all_samples) # get not called samples
+                    # Just to see the progress
+                    if interval_idx%10000 == 0 and new_idx and interval_idx != 0:
+                        print(f"{interval_idx} rows", flush=True)
+                        new_idx = False
+                    
+                    if not bed_exceeded:
+                    # Mark all genotype as NA if SNP outside bed file
+                        missing_samples = find_missing_samples(bed_table.iloc[interval_idx], all_samples) # get not called samples
 
-                    if len(missing_samples) == 0: new_vcf.write(row); continue # all samples called
+                        if len(missing_samples) == 0: new_vcf.write(row); continue # all samples called
+                        else:
+                            index_NA = [all_samples.index(sample) for sample in missing_samples] # get indices to modify the vcf
                     else:
-                        index_NA = [all_samples.index(sample) for sample in missing_samples] # get indices to modify the vcf
-                else:
-                    print(f"Warning : SNP at position {pos} is outside bed file limit. All genotypes will be markes as NA.",
-                        flush=True)
-                    index_NA = [i for i in range(len(all_samples))]
+                        print(f"Warning : SNP at position {pos} is outside bed file limit. All genotypes will be markes as NA.",
+                            flush=True)
+                        index_NA = [i for i in range(len(all_samples))]
 
-                new_row = change_SNP_genotype(row, index_NA)
-                new_vcf.write(new_row)
+                    new_row = change_SNP_genotype(row, index_NA)
+                    new_vcf.write(new_row)
+            
+            except UnicodeDecodeError:
+                print(f"Fail with {enc}, try an other encoding...")
 
 
 def find_missing_samples(bed_row, all_samples:list):

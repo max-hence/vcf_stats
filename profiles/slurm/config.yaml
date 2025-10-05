@@ -1,57 +1,57 @@
 executor: slurm
 use-conda: True
-jobs: 50 # Have up to N jobs submitted at any given time
+jobs: 100 # Have up to N jobs submitted at any given time
 latency-wait: 100 # Wait N seconds for output files due to latency
 retries: 2 # Retry jobs N times.
 
 # These resources will be applied to all rules. Can be overriden on a per-rule basis below.
 default-resources:
-  mem_mb: attempt * 1000
-  slurm_partition: "fast"
-  slurm_account: "plant_lewontin_paradox"
-  runtime: 60 # (In minutes)
+  mem_mb: attempt * 2000
+  slurm_partition: "genouest,ecobio"
+  slurm_account: "mbrault"
+  runtime: 120 # (In minutes)
   cpus_per_task: 1
 
 # Per-rule resources
 set-resources:
   ngs_paralog:
-    mem_mb: attempt * 4000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 1400 # (In minutes)
+    mem_mb: attempt * 8000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 5600 # (In minutes)
     cpus_per_task: 2
 
   correct_genotype:
-    mem_mb: attempt * 4000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 600 # (In minutes)
+    mem_mb: attempt * 10000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 2400 # (In minutes)
     cpus_per_task: 1
 
   get_stats:
-    mem_mb: attempt * 4000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 240 # (In minutes)
-    cpus_per_task: 4
+    mem_mb: attempt * 8000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 600 # (In minutes)
+    cpus_per_task: 2
 
   sfs_projection:
-    mem_mb: attempt * 20000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 720 # (In minutes
+    mem_mb: attempt * 40000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 2400 # (In minutes
     cpus_per_task: 8
 
   sfs:
-    mem_mb: attempt * 20000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 720 # (In minutes
+    mem_mb: attempt * 40000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 2800 # (In minutes
     cpus_per_task: 8
 
   vcf2allsites:
-    mem_mb: attempt * 10000
-    slurm_partition: "fast"
-    slurm_account: "plant_lewontin_paradox"
-    runtime: 720 # (In minutes
+    mem_mb: attempt * 40000
+    slurm_partition: "genouest,ecobio"
+    slurm_account: "mbrault"
+    runtime: 5600 # (In minutes
     cpus_per_task: 1
